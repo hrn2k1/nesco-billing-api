@@ -10,7 +10,8 @@
     "start": "node dist/src/app.js",
     "tsoa": "tsoa spec-and-routes",
     "prisma:generate": "prisma generate",
-    "prisma:push": "prisma db push"
+    "prisma:push": "prisma db push",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.18.0",
