@@ -53,7 +53,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"CustomerBill": {
+			"ICustomerBill": {
 				"properties": {
 					"billNo": {
 						"type": "string"
@@ -111,6 +111,86 @@
 					"paymentDate",
 					"paymentMethod",
 					"paymentStatus"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IRechargeHistory": {
+				"properties": {
+					"slNo": {
+						"type": "number",
+						"format": "double"
+					},
+					"seqNo": {
+						"type": "string"
+					},
+					"tokenNumber": {
+						"type": "string"
+					},
+					"meterRent": {
+						"type": "number",
+						"format": "double"
+					},
+					"demandCharge": {
+						"type": "number",
+						"format": "double"
+					},
+					"pfcCharge": {
+						"type": "number",
+						"format": "double"
+					},
+					"vat": {
+						"type": "number",
+						"format": "double"
+					},
+					"paidDebt": {
+						"type": "number",
+						"format": "double"
+					},
+					"rebate": {
+						"type": "number",
+						"format": "double"
+					},
+					"energyAmount": {
+						"type": "number",
+						"format": "double"
+					},
+					"rechargeAmount": {
+						"type": "number",
+						"format": "double"
+					},
+					"estimatedUnit": {
+						"type": "number",
+						"format": "double"
+					},
+					"rechargeMedia": {
+						"type": "string"
+					},
+					"rechargeDate": {
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
+					},
+					"remoteRechargeStatus": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"slNo",
+					"seqNo",
+					"tokenNumber",
+					"meterRent",
+					"demandCharge",
+					"pfcCharge",
+					"vat",
+					"paidDebt",
+					"rebate",
+					"energyAmount",
+					"rechargeAmount",
+					"estimatedUnit",
+					"rechargeMedia",
+					"rechargeDate",
+					"remoteRechargeStatus"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -198,7 +278,41 @@
 							"application/json": {
 								"schema": {
 									"items": {
-										"$ref": "#/components/schemas/CustomerBill"
+										"$ref": "#/components/schemas/ICustomerBill"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Customers"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "customerCode",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/customers/{customerCode}/recharge-histories": {
+			"get": {
+				"operationId": "GetCustomerRechargeHistories",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/IRechargeHistory"
 									},
 									"type": "array"
 								}

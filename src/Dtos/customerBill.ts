@@ -1,4 +1,4 @@
-export interface CustomerBill {
+export interface ICustomerBill {
   billNo: string;
   year: number;
   month: string;

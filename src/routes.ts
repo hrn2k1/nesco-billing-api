@@ -35,7 +35,7 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "CustomerBill": {
+    "ICustomerBill": {
         "dataType": "refObject",
         "properties": {
             "billNo": {"dataType":"string","required":true},
@@ -50,6 +50,28 @@ const models: TsoaRoute.Models = {
             "paymentStatus": {"dataType":"string","required":true},
             "detailUrl": {"dataType":"string"},
             "consumerNo": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IRechargeHistory": {
+        "dataType": "refObject",
+        "properties": {
+            "slNo": {"dataType":"double","required":true},
+            "seqNo": {"dataType":"string","required":true},
+            "tokenNumber": {"dataType":"string","required":true},
+            "meterRent": {"dataType":"double","required":true},
+            "demandCharge": {"dataType":"double","required":true},
+            "pfcCharge": {"dataType":"double","required":true},
+            "vat": {"dataType":"double","required":true},
+            "paidDebt": {"dataType":"double","required":true},
+            "rebate": {"dataType":"double","required":true},
+            "energyAmount": {"dataType":"double","required":true},
+            "rechargeAmount": {"dataType":"double","required":true},
+            "estimatedUnit": {"dataType":"double","required":true},
+            "rechargeMedia": {"dataType":"string","required":true},
+            "rechargeDate": {"dataType":"union","subSchemas":[{"dataType":"datetime"},{"dataType":"enum","enums":[null]}],"required":true},
+            "remoteRechargeStatus": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -150,6 +172,36 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'getCustomerBills',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsCustomersController_getCustomerRechargeHistories: Record<string, TsoaRoute.ParameterSchema> = {
+                customerCode: {"in":"path","name":"customerCode","required":true,"dataType":"string"},
+        };
+        app.get('/customers/:customerCode/recharge-histories',
+            ...(fetchMiddlewares<RequestHandler>(CustomersController)),
+            ...(fetchMiddlewares<RequestHandler>(CustomersController.prototype.getCustomerRechargeHistories)),
+
+            async function CustomersController_getCustomerRechargeHistories(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsCustomersController_getCustomerRechargeHistories, request, response });
+
+                const controller = new CustomersController();
+
+              await templateService.apiHandler({
+                methodName: 'getCustomerRechargeHistories',
                 controller,
                 response,
                 next,
