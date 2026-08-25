@@ -5,7 +5,7 @@ import swaggerDocument from './swagger.json';
 
 const app = express();
 app.use(express.json());
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const apiRouter = express.Router();
 RegisterRoutes(apiRouter);
@@ -17,11 +17,12 @@ app.use((error: Error, _request: Request, response: Response, _next: NextFunctio
   });
 });
 
-const port = Number(process.env.PORT ?? 3000);
+const port = Number(process.env.PORT ?? 2000);
 if (require.main === module) {
   app.listen(port, () => {
     console.log(`NESCO API listening on port ${port}`);
   });
 }
 
+export default app;
 export { app };
