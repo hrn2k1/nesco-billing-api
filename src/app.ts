@@ -60,11 +60,28 @@ app.use((error: Error, _request: Request, response: Response, _next: NextFunctio
   });
 });
 
-const port = Number(process.env.PORT ?? 2000);
-if (require.main === module) {
-  app.listen(port, () => {
+const defaultPort = Number(process.env.PORT ?? 2000);
+
+const startServer = (port: number, attempt = 0) => {
+  const server = app.listen(port, () => {
     console.log(`NESCO API listening on port ${port}`);
   });
+
+  server.on('error', (error: NodeJS.ErrnoException) => {
+    if (error.code === 'EADDRINUSE' && attempt < 10) {
+      const nextPort = port + 1;
+      console.warn(`Port ${port} is busy, retrying on ${nextPort}`);
+      startServer(nextPort, attempt + 1);
+      return;
+    }
+
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  });
+};
+
+if (require.main === module) {
+  startServer(defaultPort);
 }
 
 export default app;
