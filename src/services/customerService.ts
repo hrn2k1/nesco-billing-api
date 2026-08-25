@@ -46,6 +46,35 @@ function createSessionAwareClient() {
     return client;
 }
 
+async function fetchHtmlPage(client: any, url: string, extraHeaders: Record<string, string> = {}) {
+    const response = await client.get(url, {
+        headers: {
+            Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Cache-Control": "no-cache",
+            Pragma: "no-cache",
+            "Upgrade-Insecure-Requests": "1",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-User": "?1",
+            ...extraHeaders
+        }
+    });
+
+    const contentType = response.headers?.["content-type"] || "";
+    const html = typeof response.data === "string"
+        ? response.data
+        : Buffer.isBuffer(response.data)
+            ? response.data.toString("utf-8")
+            : String(response.data ?? "");
+
+    if (!html || html.trim().length === 0) {
+        throw new Error(`Empty HTML response from ${url}. Status=${response.status}. Content-Type=${contentType}`);
+    }
+
+    return { response, html };
+}
+
 export class CustomerService {
     public constructor() { }
 
@@ -78,13 +107,19 @@ export class CustomerService {
         try {
             const client = createSessionAwareClient();
 
-            const getResponse = await client.get(webUrl);
-            const html = getResponse.data;
-            console.log(html);
-            const $ = cheerio.load(html);
-            const csrfToken = $("input[name='_token']").val();
+            const { html, response } = await fetchHtmlPage(client, webUrl, {
+                Referer: webDomain,
+                Origin: webDomain,
+            });
 
-            console.log("Token:", csrfToken);
+            console.log("GET /post/bill status:", response.status);
+            console.log("GET /post/bill content-type:", response.headers?.["content-type"]);
+            console.log("GET /post/bill snippet:", html.slice(0, 400));
+
+            const $ = cheerio.load(html);
+            const csrfToken = $("input[name='_token']").val() || $("meta[name='csrf-token']").attr("content");
+
+            console.log("Token=", csrfToken);
 
             const qs = new URLSearchParams();
             qs.append("_token", String(csrfToken));
@@ -156,10 +191,17 @@ export class CustomerService {
         try {
             const client = createSessionAwareClient();
 
-            const getResponse = await client.get(webUrl);
-            const html = getResponse.data;
+            const { html, response } = await fetchHtmlPage(client, webUrl, {
+                Referer: webDomain,
+                Origin: webDomain,
+            });
+
+            console.log("GET /pre/panel status:", response.status);
+            console.log("GET /pre/panel content-type:", response.headers?.["content-type"]);
+            console.log("GET /pre/panel snippet:", html.slice(0, 400));
+
             const $ = cheerio.load(html);
-            const csrfToken = $("input[name='_token']").val();
+            const csrfToken = $("input[name='_token']").val() || $("meta[name='csrf-token']").attr("content");
 
             console.log("Token:", csrfToken);
 
