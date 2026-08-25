@@ -4,7 +4,11 @@ import { IRechargeHistory } from "../Dtos/rechargeHistory";
 const axios = require("axios") as typeof import("axios");
 const cheerio = require("cheerio");
 const { CookieJar } = require("tough-cookie");
-const { wrapper } = require("axios-cookiejar-support");
+
+async function getCookieJarWrapper() {
+    const mod = await import("axios-cookiejar-support");
+    return mod.wrapper;
+}
 
 export class CustomerService {
     public constructor() { }
@@ -37,6 +41,7 @@ export class CustomerService {
         const webUrl = `${webDomain}post/bill`;
         try {
             const jar = new CookieJar();
+            const { wrapper } = await import("axios-cookiejar-support");
             const client = wrapper(
                 axios.create({
                     jar,
@@ -121,6 +126,7 @@ export class CustomerService {
         const webUrl = `${webDomain}pre/panel`;
         try {
             const jar = new CookieJar();
+            const { wrapper } = await import("axios-cookiejar-support");
             const client = wrapper(
                 axios.create({
                     jar,
