@@ -3,11 +3,47 @@ import { IRechargeHistory } from "../Dtos/rechargeHistory";
 
 const axios = require("axios") as typeof import("axios");
 const cheerio = require("cheerio");
-const { CookieJar } = require("tough-cookie");
 
-async function getCookieJarWrapper() {
-    const mod = await import("axios-cookiejar-support");
-    return mod.wrapper;
+function createSessionAwareClient() {
+    const cookies = new Map<string, string>();
+
+    const setCookies = (headerValue?: string | string[]) => {
+        const values = Array.isArray(headerValue) ? headerValue : headerValue ? [headerValue] : [];
+
+        values.forEach((cookieHeader) => {
+            cookieHeader.split(",").forEach((part) => {
+                const match = part.match(/([^=;]+)=([^;]+)/);
+                if (!match) return;
+                const key = match[1].trim();
+                const value = match[2].trim();
+                if (key) cookies.set(key, value);
+            });
+        });
+    };
+
+    const client = axios.create({
+        withCredentials: true,
+        headers: {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/138.0 Safari/537.36"
+        },
+        validateStatus: () => true
+    });
+
+    client.interceptors.request.use((config: any) => {
+        const cookieHeader = Array.from(cookies.entries()).map(([key, value]) => `${key}=${value}`).join("; ");
+        if (cookieHeader) {
+            config.headers = config.headers || {};
+            config.headers.Cookie = cookieHeader;
+        }
+        return config;
+    });
+
+    client.interceptors.response.use((response: any) => {
+        setCookies(response.headers?.["set-cookie"]);
+        return response;
+    });
+
+    return client;
 }
 
 export class CustomerService {
@@ -40,17 +76,7 @@ export class CustomerService {
         const webDomain = "https://customer.nesco.gov.bd/";
         const webUrl = `${webDomain}post/bill`;
         try {
-            const jar = new CookieJar();
-            const { wrapper } = await import("axios-cookiejar-support");
-            const client: any = (wrapper as any)(
-                axios.create({
-                    jar,
-                    withCredentials: true,
-                    headers: {
-                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/138.0 Safari/537.36"
-                    }
-                } as any)
-            );
+            const client = createSessionAwareClient();
 
             const getResponse = await client.get(webUrl);
             const html = getResponse.data;
@@ -60,7 +86,7 @@ export class CustomerService {
             console.log("Token:", csrfToken);
 
             const qs = new URLSearchParams();
-            qs.append("_token", csrfToken);
+            qs.append("_token", String(csrfToken));
             qs.append("cust_no", customerAccount);
             qs.append("submit", "All Bills");
             const postResponse = await client.post(webUrl,
@@ -68,6 +94,8 @@ export class CustomerService {
                 {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRF-TOKEN": String(csrfToken),
+                        "X-Requested-With": "XMLHttpRequest",
                         Referer: webDomain,
                         Origin: webDomain
                     }
@@ -125,17 +153,7 @@ export class CustomerService {
         const webDomain = "https://customer.nesco.gov.bd/";
         const webUrl = `${webDomain}pre/panel`;
         try {
-            const jar = new CookieJar();
-            const { wrapper } = await import("axios-cookiejar-support");
-            const client: any = (wrapper as any)(
-                axios.create({
-                    jar,
-                    withCredentials: true,
-                    headers: {
-                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/138.0 Safari/537.36"
-                    }
-                } as any)
-            );
+            const client = createSessionAwareClient();
 
             const getResponse = await client.get(webUrl);
             const html = getResponse.data;
@@ -145,7 +163,7 @@ export class CustomerService {
             console.log("Token:", csrfToken);
 
             const qs = new URLSearchParams();
-            qs.append("_token", csrfToken);
+            qs.append("_token", String(csrfToken));
             qs.append("cust_no", customerAccount);
             qs.append("submit", "Recharge History");
             const postResponse = await client.post(webUrl,
@@ -153,6 +171,8 @@ export class CustomerService {
                 {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRF-TOKEN": String(csrfToken),
+                        "X-Requested-With": "XMLHttpRequest",
                         Referer: webDomain,
                         Origin: webDomain
                     }
