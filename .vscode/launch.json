@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug NESCO API",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/app.ts",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node.cmd",
+      "preLaunchTask": "npm: tsoa",
+      "env": {
+        "NODE_ENV": "development",
+        "PORT": "3000"
+      },
+      "skipFiles": [
+        "<node_internals>/**",
+        "${workspaceFolder}/node_modules/**"
+      ],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!${workspaceFolder}/node_modules/**"
+      ],
+      "restart": false,
+      "console": "integratedTerminal"
+    }
+  ]
+}

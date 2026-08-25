@@ -1,0 +1,231 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"UserResponse": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"email",
+					"name",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateUserInput": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"email"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CustomerBill": {
+				"properties": {
+					"billNo": {
+						"type": "string"
+					},
+					"year": {
+						"type": "number",
+						"format": "double"
+					},
+					"month": {
+						"type": "string"
+					},
+					"totalBill": {
+						"type": "number",
+						"format": "double"
+					},
+					"lateFee": {
+						"type": "number",
+						"format": "double"
+					},
+					"dueDate": {
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
+					},
+					"paidAmount": {
+						"type": "number",
+						"format": "double"
+					},
+					"paymentDate": {
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
+					},
+					"paymentMethod": {
+						"type": "string"
+					},
+					"paymentStatus": {
+						"type": "string"
+					},
+					"detailUrl": {
+						"type": "string"
+					},
+					"consumerNo": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"billNo",
+					"year",
+					"month",
+					"totalBill",
+					"lateFee",
+					"dueDate",
+					"paidAmount",
+					"paymentDate",
+					"paymentMethod",
+					"paymentStatus"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "nesco-api",
+		"version": "1.0.0",
+		"description": "Strictly typed Express REST API with TSOA and Prisma",
+		"contact": {}
+	},
+	"paths": {
+		"/users/{id}": {
+			"get": {
+				"operationId": "GetUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/users": {
+			"post": {
+				"operationId": "CreateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateUserInput"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/customers/{customerCode}/bills": {
+			"get": {
+				"operationId": "GetCustomerBills",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/CustomerBill"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Customers"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "customerCode",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/api"
+		}
+	]
+}
