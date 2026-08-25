@@ -80,6 +80,7 @@ export class CustomerService {
 
             const getResponse = await client.get(webUrl);
             const html = getResponse.data;
+            console.log(html);
             const $ = cheerio.load(html);
             const csrfToken = $("input[name='_token']").val();
 
