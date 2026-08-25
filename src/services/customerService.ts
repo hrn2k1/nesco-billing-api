@@ -42,7 +42,7 @@ export class CustomerService {
         try {
             const jar = new CookieJar();
             const { wrapper } = await import("axios-cookiejar-support");
-            const client = wrapper(
+            const client: any = (wrapper as any)(
                 axios.create({
                     jar,
                     withCredentials: true,
@@ -127,7 +127,7 @@ export class CustomerService {
         try {
             const jar = new CookieJar();
             const { wrapper } = await import("axios-cookiejar-support");
-            const client = wrapper(
+            const client: any = (wrapper as any)(
                 axios.create({
                     jar,
                     withCredentials: true,

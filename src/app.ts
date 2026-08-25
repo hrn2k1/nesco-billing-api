@@ -5,7 +5,21 @@ import swaggerDocument from './swagger.json';
 
 const app = express();
 app.use(express.json());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+const swaggerOptions = {
+  explorer: true,
+  customSiteTitle: 'NESCO API Docs',
+  swaggerOptions: {
+    url: '/api-docs.json'
+  }
+};
+
+app.use('/api-docs', swaggerUi.serve);
+app.get('/api-docs', swaggerUi.setup(swaggerDocument, swaggerOptions));
+app.get('/docs', swaggerUi.setup(swaggerDocument, swaggerOptions));
+app.get('/api-docs.json', (_request: Request, response: Response) => {
+  response.json(swaggerDocument);
+});
 
 const apiRouter = express.Router();
 RegisterRoutes(apiRouter);
