@@ -68,11 +68,29 @@ async function fetchHtmlPage(client: any, url: string, extraHeaders: Record<stri
             ? response.data.toString("utf-8")
             : String(response.data ?? "");
 
+    if (response.status < 200 || response.status >= 300) {
+        throw new Error(
+            `NESCO returned HTTP ${response.status} for ${url}. ` +
+            `Content-Type=${contentType}. Response=${html.slice(0, 500)}`
+        );
+    }
+
     if (!html || html.trim().length === 0) {
         throw new Error(`Empty HTML response from ${url}. Status=${response.status}. Content-Type=${contentType}`);
     }
 
     return { response, html };
+}
+
+function assertSuccessfulResponse(response: any, url: string) {
+    if (response.status < 200 || response.status >= 300) {
+        const contentType = response.headers?.["content-type"] || "";
+        const body = typeof response.data === "string" ? response.data : JSON.stringify(response.data);
+        throw new Error(
+            `NESCO returned HTTP ${response.status} for ${url}. ` +
+            `Content-Type=${contentType}. Response=${body.slice(0, 500)}`
+        );
+    }
 }
 
 export class CustomerService {
@@ -137,6 +155,8 @@ export class CustomerService {
                     }
                 }
             );
+
+            assertSuccessfulResponse(postResponse, webUrl);
 
             const resultHtml = postResponse.data;
             const $2 = cheerio.load(resultHtml);
@@ -221,6 +241,8 @@ export class CustomerService {
                     }
                 }
             );
+
+            assertSuccessfulResponse(postResponse, webUrl);
 
             const resultHtml = postResponse.data;
             const $2 = cheerio.load(resultHtml);
