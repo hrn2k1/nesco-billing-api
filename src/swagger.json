@@ -53,6 +53,56 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ICustomerInfo": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"careOf": {
+						"type": "string"
+					},
+					"consumerNo": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"mobile": {
+						"type": "string"
+					},
+					"concernOffice": {
+						"type": "string"
+					},
+					"feederName": {
+						"type": "string"
+					},
+					"meterNo": {
+						"type": "string"
+					},
+					"meterType": {
+						"type": "string"
+					},
+					"meterStatus": {
+						"type": "string"
+					},
+					"loadKw": {
+						"type": "number",
+						"format": "double"
+					},
+					"tariff": {
+						"type": "string"
+					},
+					"balance": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ICustomerBill": {
 				"properties": {
 					"billNo": {
@@ -111,6 +161,25 @@
 					"paymentDate",
 					"paymentMethod",
 					"paymentStatus"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ICustomerBillResponse": {
+				"properties": {
+					"customerInfo": {
+						"$ref": "#/components/schemas/ICustomerInfo"
+					},
+					"bills": {
+						"items": {
+							"$ref": "#/components/schemas/ICustomerBill"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"customerInfo",
+					"bills"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -191,6 +260,101 @@
 					"rechargeMedia",
 					"rechargeDate",
 					"remoteRechargeStatus"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IRechargeHistoryResponse": {
+				"properties": {
+					"customerInfo": {
+						"$ref": "#/components/schemas/ICustomerInfo"
+					},
+					"rechargeHistories": {
+						"items": {
+							"$ref": "#/components/schemas/IRechargeHistory"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"customerInfo",
+					"rechargeHistories"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IMonthlyConsumption": {
+				"properties": {
+					"year": {
+						"type": "number",
+						"format": "double"
+					},
+					"month": {
+						"type": "string"
+					},
+					"totalRecharge": {
+						"type": "number",
+						"format": "double"
+					},
+					"rebate": {
+						"type": "number",
+						"format": "double"
+					},
+					"energyUsage": {
+						"type": "number",
+						"format": "double"
+					},
+					"meterRent": {
+						"type": "number",
+						"format": "double"
+					},
+					"demandCharge": {
+						"type": "number",
+						"format": "double"
+					},
+					"pfcCharge": {
+						"type": "number",
+						"format": "double"
+					},
+					"paidDebt": {
+						"type": "number",
+						"format": "double"
+					},
+					"vat": {
+						"type": "number",
+						"format": "double"
+					},
+					"totalUsageDeduction": {
+						"type": "number",
+						"format": "double"
+					},
+					"monthEndBalance": {
+						"type": "number",
+						"format": "double"
+					},
+					"energyUsageUnit": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IMonthlyConsumptionResponse": {
+				"properties": {
+					"customerInfo": {
+						"$ref": "#/components/schemas/ICustomerInfo"
+					},
+					"monthlyConsumptions": {
+						"items": {
+							"$ref": "#/components/schemas/IMonthlyConsumption"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"customerInfo",
+					"monthlyConsumptions"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -277,15 +441,13 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ICustomerBill"
-									},
-									"type": "array"
+									"$ref": "#/components/schemas/ICustomerBillResponse"
 								}
 							}
 						}
 					}
 				},
+				"description": "Get monthly bills of postpaid customers",
 				"tags": [
 					"Customers"
 				],
@@ -311,15 +473,45 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/IRechargeHistory"
-									},
-									"type": "array"
+									"$ref": "#/components/schemas/IRechargeHistoryResponse"
 								}
 							}
 						}
 					}
 				},
+				"description": "Get recharge histories of prepaid customers",
+				"tags": [
+					"Customers"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "customerCode",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/customers/{customerCode}/monthly-consumption": {
+			"get": {
+				"operationId": "GetCustomerMonthlyConsumption",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IMonthlyConsumptionResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get monthly consumption data of prepaid customers",
 				"tags": [
 					"Customers"
 				],

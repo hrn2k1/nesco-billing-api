@@ -35,6 +35,27 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ICustomerInfo": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string"},
+            "careOf": {"dataType":"string"},
+            "consumerNo": {"dataType":"string"},
+            "type": {"dataType":"string"},
+            "address": {"dataType":"string"},
+            "mobile": {"dataType":"string"},
+            "concernOffice": {"dataType":"string"},
+            "feederName": {"dataType":"string"},
+            "meterNo": {"dataType":"string"},
+            "meterType": {"dataType":"string"},
+            "meterStatus": {"dataType":"string"},
+            "loadKw": {"dataType":"double"},
+            "tariff": {"dataType":"string"},
+            "balance": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ICustomerBill": {
         "dataType": "refObject",
         "properties": {
@@ -50,6 +71,15 @@ const models: TsoaRoute.Models = {
             "paymentStatus": {"dataType":"string","required":true},
             "detailUrl": {"dataType":"string"},
             "consumerNo": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ICustomerBillResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "customerInfo": {"ref":"ICustomerInfo","required":true},
+            "bills": {"dataType":"array","array":{"dataType":"refObject","ref":"ICustomerBill"},"required":true},
         },
         "additionalProperties": false,
     },
@@ -72,6 +102,44 @@ const models: TsoaRoute.Models = {
             "rechargeMedia": {"dataType":"string","required":true},
             "rechargeDate": {"dataType":"union","subSchemas":[{"dataType":"datetime"},{"dataType":"enum","enums":[null]}],"required":true},
             "remoteRechargeStatus": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IRechargeHistoryResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "customerInfo": {"ref":"ICustomerInfo","required":true},
+            "rechargeHistories": {"dataType":"array","array":{"dataType":"refObject","ref":"IRechargeHistory"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IMonthlyConsumption": {
+        "dataType": "refObject",
+        "properties": {
+            "year": {"dataType":"double"},
+            "month": {"dataType":"string"},
+            "totalRecharge": {"dataType":"double"},
+            "rebate": {"dataType":"double"},
+            "energyUsage": {"dataType":"double"},
+            "meterRent": {"dataType":"double"},
+            "demandCharge": {"dataType":"double"},
+            "pfcCharge": {"dataType":"double"},
+            "paidDebt": {"dataType":"double"},
+            "vat": {"dataType":"double"},
+            "totalUsageDeduction": {"dataType":"double"},
+            "monthEndBalance": {"dataType":"double"},
+            "energyUsageUnit": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IMonthlyConsumptionResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "customerInfo": {"ref":"ICustomerInfo","required":true},
+            "monthlyConsumptions": {"dataType":"array","array":{"dataType":"refObject","ref":"IMonthlyConsumption"},"required":true},
         },
         "additionalProperties": false,
     },
@@ -202,6 +270,36 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'getCustomerRechargeHistories',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsCustomersController_getCustomerMonthlyConsumption: Record<string, TsoaRoute.ParameterSchema> = {
+                customerCode: {"in":"path","name":"customerCode","required":true,"dataType":"string"},
+        };
+        app.get('/customers/:customerCode/monthly-consumption',
+            ...(fetchMiddlewares<RequestHandler>(CustomersController)),
+            ...(fetchMiddlewares<RequestHandler>(CustomersController.prototype.getCustomerMonthlyConsumption)),
+
+            async function CustomersController_getCustomerMonthlyConsumption(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsCustomersController_getCustomerMonthlyConsumption, request, response });
+
+                const controller = new CustomersController();
+
+              await templateService.apiHandler({
+                methodName: 'getCustomerMonthlyConsumption',
                 controller,
                 response,
                 next,
