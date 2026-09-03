@@ -55,7 +55,13 @@ RegisterRoutes(apiRouter);
 app.use('/api', apiRouter);
 
 app.use((error: Error, _request: Request, response: Response, _next: NextFunction) => {
-  response.status(response.statusCode >= 400 ? response.statusCode : 500).json({
+  const statusCode = 'statusCode' in error && typeof error.statusCode === 'number'
+    ? error.statusCode
+    : response.statusCode >= 400
+      ? response.statusCode
+      : 500;
+
+  response.status(statusCode).json({
     message: error.message || 'Internal server error'
   });
 });

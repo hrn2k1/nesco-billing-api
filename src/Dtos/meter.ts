@@ -13,3 +13,6 @@ export interface UpdateMeterInput {
   provider?: 'NESCO' | 'DESCO';
   userId?: string;
 }
+
+export type CreateMyMeterInput = Omit<CreateMeterInput, 'userId'>;
+export type UpdateMyMeterInput = Omit<UpdateMeterInput, 'userId'>;

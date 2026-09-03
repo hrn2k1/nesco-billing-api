@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Patch, Path, Post, Route, Tags } from 'tsoa';
+import { Body, Controller, Delete, Get, Patch, Path, Post, Route, Security, Tags } from 'tsoa';
 import { UserDto } from '../models/user';
 import { prisma } from '../config/prisma';
 import { UserRepository } from '../repositories/userRepository';
@@ -10,6 +10,7 @@ const defaultUserService = new UserService(new UserRepository(prisma));
 
 @Route('users')
 @Tags('Users')
+@Security('bearerAuth')
 export class UsersController extends Controller {
   public constructor(private readonly userService: UserService = defaultUserService) {
     super();

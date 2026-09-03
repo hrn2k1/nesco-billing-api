@@ -249,6 +249,101 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"MeResponse": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"loginName": {
+						"type": "string"
+					},
+					"provider": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"mobileNo": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"loginName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Pick_CreateMeterInput.Exclude_keyofCreateMeterInput.userId__": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"accountNo": {
+						"type": "string"
+					},
+					"accountType": {
+						"type": "string",
+						"enum": [
+							"Prepaid",
+							"Postpaid"
+						]
+					},
+					"provider": {
+						"type": "string",
+						"enum": [
+							"NESCO",
+							"DESCO"
+						]
+					}
+				},
+				"required": [
+					"name",
+					"accountNo"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_CreateMeterInput.userId_": {
+				"$ref": "#/components/schemas/Pick_CreateMeterInput.Exclude_keyofCreateMeterInput.userId__",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"CreateMyMeterInput": {
+				"$ref": "#/components/schemas/Omit_CreateMeterInput.userId_"
+			},
+			"Pick_UpdateMeterInput.Exclude_keyofUpdateMeterInput.userId__": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"accountNo": {
+						"type": "string"
+					},
+					"accountType": {
+						"type": "string",
+						"enum": [
+							"Prepaid",
+							"Postpaid"
+						]
+					},
+					"provider": {
+						"type": "string",
+						"enum": [
+							"NESCO",
+							"DESCO"
+						]
+					}
+				},
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_UpdateMeterInput.userId_": {
+				"$ref": "#/components/schemas/Pick_UpdateMeterInput.Exclude_keyofUpdateMeterInput.userId__",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"UpdateMyMeterInput": {
+				"$ref": "#/components/schemas/Omit_UpdateMeterInput.userId_"
+			},
 			"ICustomerInfo": {
 				"properties": {
 					"name": {
@@ -640,7 +735,13 @@
 				]
 			}
 		},
-		"securitySchemes": {}
+		"securitySchemes": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
 	},
 	"info": {
 		"title": "nesco-api",
@@ -670,7 +771,11 @@
 				"tags": [
 					"Users"
 				],
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": []
 			},
 			"post": {
@@ -690,7 +795,11 @@
 				"tags": [
 					"Users"
 				],
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -722,7 +831,11 @@
 				"tags": [
 					"Users"
 				],
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -751,7 +864,11 @@
 				"tags": [
 					"Users"
 				],
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -790,7 +907,11 @@
 				"tags": [
 					"Users"
 				],
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -821,7 +942,11 @@
 				"tags": [
 					"Users"
 				],
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -865,7 +990,11 @@
 				"tags": [
 					"Meters"
 				],
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "query",
@@ -894,7 +1023,11 @@
 				"tags": [
 					"Meters"
 				],
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -926,7 +1059,11 @@
 				"tags": [
 					"Meters"
 				],
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -955,7 +1092,11 @@
 				"tags": [
 					"Meters"
 				],
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -994,7 +1135,178 @@
 				"tags": [
 					"Meters"
 				],
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/me": {
+			"get": {
+				"operationId": "GetMe",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MeResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Me"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/me/meters": {
+			"get": {
+				"operationId": "GetMyMeters",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/MeterDto"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Me"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateMyMeter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MeterDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Me"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateMyMeterInput"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/me/meters/{id}": {
+			"patch": {
+				"operationId": "UpdateMyMeter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MeterDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Me"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateMyMeterInput"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteMyMeter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MeterDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Me"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -1026,7 +1338,11 @@
 				"tags": [
 					"Customers"
 				],
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -1058,7 +1374,11 @@
 				"tags": [
 					"Customers"
 				],
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -1090,7 +1410,11 @@
 				"tags": [
 					"Customers"
 				],
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",

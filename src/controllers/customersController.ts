@@ -1,4 +1,4 @@
-import { Controller, Get, Path, Route, Tags } from 'tsoa';
+import { Controller, Get, Path, Route, Security, Tags } from 'tsoa';
 import { ICustomerBillResponse } from '../Dtos/customerBill';
 import { CustomerService } from '../services/customerService';
 import { IMonthlyConsumptionResponse, IRechargeHistoryResponse } from '../Dtos/rechargeHistory';
@@ -7,6 +7,7 @@ const defaultCustomerService = new CustomerService();
 
 @Route('customers')
 @Tags('Customers')
+@Security('bearerAuth')
 export class CustomersController extends Controller {
 
     public constructor(private readonly customerService: CustomerService = defaultCustomerService) {

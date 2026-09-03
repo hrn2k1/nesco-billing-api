@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Path, Post, Put, Query, Route, Tags } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Put, Query, Route, Security, Tags } from 'tsoa';
 import { MeterDto } from '../models/meter';
 import { prisma } from '../config/prisma';
 import { CreateMeterInput, UpdateMeterInput } from '../Dtos/meter';
@@ -10,6 +10,7 @@ const defaultMeterService = new MeterService(new MeterRepository(prisma));
 
 @Route('meters')
 @Tags('Meters')
+@Security('bearerAuth')
 export class MetersController extends Controller {
 	public constructor(private readonly meterService: MeterService = defaultMeterService) {
 		super();

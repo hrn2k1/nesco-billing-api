@@ -1,5 +1,5 @@
 import { Meter } from '@prisma/client';
-import { CreateMeterInput, UpdateMeterInput } from '../Dtos/meter';
+import { CreateMeterInput, CreateMyMeterInput, UpdateMeterInput, UpdateMyMeterInput } from '../Dtos/meter';
 import { MeterRepository } from '../repositories/meterRepository';
 
 export class MeterService {
@@ -17,11 +17,37 @@ export class MeterService {
     return this.meterRepository.create(input);
   }
 
+  public createMyMeter(userId: string, input: CreateMyMeterInput): Promise<Meter> {
+    return this.meterRepository.create({ ...input, userId });
+  }
+
   public updateMeter(id: string, input: UpdateMeterInput): Promise<Meter> {
     return this.meterRepository.update(id, input);
   }
 
+  public async updateMyMeter(
+    id: string,
+    userId: string,
+    input: UpdateMyMeterInput,
+  ): Promise<Meter | null> {
+    const meter = await this.meterRepository.findById(id);
+    if (!meter || meter.userId !== userId) {
+      return null;
+    }
+
+    return this.meterRepository.update(id, input);
+  }
+
   public deleteMeter(id: string): Promise<Meter> {
+    return this.meterRepository.delete(id);
+  }
+
+  public async deleteMyMeter(id: string, userId: string): Promise<Meter | null> {
+    const meter = await this.meterRepository.findById(id);
+    if (!meter || meter.userId !== userId) {
+      return null;
+    }
+
     return this.meterRepository.delete(id);
   }
 }
