@@ -7,15 +7,40 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"UserResponse": {
+			"UserDto": {
 				"properties": {
 					"id": {
 						"type": "string"
 					},
+					"name": {
+						"type": "string"
+					},
+					"loginName": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"provider": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "string",
+								"enum": [
+									"app",
+									"google",
+									"facebook",
+									"microsoft"
+								]
+							}
+						]
+					},
 					"email": {
 						"type": "string"
 					},
-					"name": {
+					"mobileNo": {
 						"type": "string"
 					},
 					"createdAt": {
@@ -29,10 +54,9 @@
 				},
 				"required": [
 					"id",
-					"email",
 					"name",
-					"createdAt",
-					"updatedAt"
+					"loginName",
+					"createdAt"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -42,14 +66,186 @@
 					"name": {
 						"type": "string"
 					},
+					"loginName": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"provider": {
+						"type": "string",
+						"enum": [
+							"app",
+							"google",
+							"facebook",
+							"microsoft"
+						]
+					},
 					"email": {
+						"type": "string"
+					},
+					"mobileNo": {
 						"type": "string"
 					}
 				},
 				"required": [
 					"name",
-					"email"
+					"loginName"
 				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateUserInput": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"mobileNo": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ChangePasswordInput": {
+				"properties": {
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MeterDto": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"accountNo": {
+						"type": "string"
+					},
+					"accountType": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "string",
+								"enum": [
+									"Prepaid",
+									"Postpaid"
+								]
+							}
+						],
+						"nullable": true
+					},
+					"provider": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "string",
+								"enum": [
+									"NESCO",
+									"DESCO"
+								]
+							}
+						]
+					},
+					"userId": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"accountNo",
+					"createdAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateMeterInput": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"accountNo": {
+						"type": "string"
+					},
+					"accountType": {
+						"type": "string",
+						"enum": [
+							"Prepaid",
+							"Postpaid"
+						]
+					},
+					"provider": {
+						"type": "string",
+						"enum": [
+							"NESCO",
+							"DESCO"
+						]
+					},
+					"userId": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"accountNo",
+					"userId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateMeterInput": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"accountNo": {
+						"type": "string"
+					},
+					"accountType": {
+						"type": "string",
+						"enum": [
+							"Prepaid",
+							"Postpaid"
+						]
+					},
+					"provider": {
+						"type": "string",
+						"enum": [
+							"NESCO",
+							"DESCO"
+						]
+					},
+					"userId": {
+						"type": "string"
+					}
+				},
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -358,6 +554,90 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"LoginResponse": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"loginName": {
+						"type": "string"
+					},
+					"provider": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"mobileNo": {
+						"type": "string"
+					},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"loginName",
+					"token"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AppLoginInput": {
+				"properties": {
+					"loginName": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"loginName",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"OAuthLoginInput": {
+				"properties": {
+					"loginName": {
+						"type": "string"
+					},
+					"provider": {
+						"type": "string",
+						"enum": [
+							"google",
+							"facebook",
+							"microsoft"
+						]
+					},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"loginName",
+					"provider",
+					"token"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LoginInput": {
+				"anyOf": [
+					{
+						"$ref": "#/components/schemas/AppLoginInput"
+					},
+					{
+						"$ref": "#/components/schemas/OAuthLoginInput"
+					}
+				]
 			}
 		},
 		"securitySchemes": {}
@@ -365,10 +645,65 @@
 	"info": {
 		"title": "nesco-api",
 		"version": "1.0.0",
-		"description": "Strictly typed Express REST API with TSOA and Prisma",
+		"description": "NESCO Billing API",
 		"contact": {}
 	},
 	"paths": {
+		"/users": {
+			"get": {
+				"operationId": "GetUsers",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/UserDto"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateUserInput"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/users/{id}": {
 			"get": {
 				"operationId": "GetUser",
@@ -378,7 +713,75 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserResponse"
+									"$ref": "#/components/schemas/UserDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateUserInput"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserDto"
 								}
 							}
 						}
@@ -400,16 +803,16 @@
 				]
 			}
 		},
-		"/users": {
-			"post": {
-				"operationId": "CreateUser",
+		"/users/{id}/change-password": {
+			"patch": {
+				"operationId": "ChangePassword",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserResponse"
+									"$ref": "#/components/schemas/UserDto"
 								}
 							}
 						}
@@ -419,17 +822,189 @@
 					"Users"
 				],
 				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ChangePasswordInput"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/meters": {
+			"get": {
+				"operationId": "GetMeters",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/MeterDto"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Meters"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "userId",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateMeter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MeterDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Meters"
+				],
+				"security": [],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/CreateUserInput"
+								"$ref": "#/components/schemas/CreateMeterInput"
 							}
 						}
 					}
 				}
+			}
+		},
+		"/meters/{id}": {
+			"get": {
+				"operationId": "GetMeter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MeterDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Meters"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateMeter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MeterDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Meters"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateMeterInput"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteMeter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MeterDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Meters"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		},
 		"/customers/{customerCode}/bills": {
@@ -526,6 +1101,70 @@
 						}
 					}
 				]
+			}
+		},
+		"/auth/register": {
+			"post": {
+				"operationId": "Register",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Authentication"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateUserInput"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LoginResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Authentication"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginInput"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

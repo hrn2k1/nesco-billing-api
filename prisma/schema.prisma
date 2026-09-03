@@ -8,9 +8,26 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
+  id        String   @id @default(uuid()) @map("_id")
   name      String
+  loginName String   @unique
+  password  String?
+  provider  String?
+  email     String?
+  mobileNo  String?
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime? @updatedAt
+  meters    Meter[]
+}
+
+model Meter {
+  id          String   @id @default(uuid()) @map("_id")
+  name        String
+  accountNo   String
+  accountType String? @default("Prepaid")
+  provider    String?  @default("NESCO")
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime? @updatedAt
 }
