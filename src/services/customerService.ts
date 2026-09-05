@@ -162,9 +162,10 @@ export class CustomerService {
             const resultHtml = postResponse.data;
             const $2 = cheerio.load(resultHtml);
 
-            const customerInfo: ICustomerInfo | any = null;
+            let customerInfo: ICustomerInfo | any = null;
             $2("#con_info_div .card-body .form-group.row input[type='text']")
                 .each((index: number, input: any) => {
+                    if(!customerInfo) customerInfo = {};
                     switch (index) {
                         case 0:
                             customerInfo.name = $2(input).val()?.toString()?.trim() || "";
@@ -394,9 +395,10 @@ export class CustomerService {
             const resultHtml = postResponse.data;
             const $2 = cheerio.load(resultHtml);
 
-            const customerInfo: ICustomerInfo | any = null;
+            let customerInfo: ICustomerInfo | any = null;
             $2("#con_info_div .card-body .form-group.row input[type='text']")
                 .each((index: number, input: any) => {
+                    if(!customerInfo) customerInfo = {};
                     switch (index) {
                         case 0:
                             customerInfo.name = $2(input).val()?.toString()?.trim() || "";
