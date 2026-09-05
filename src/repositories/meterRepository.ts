@@ -14,11 +14,11 @@ export class MeterRepository {
     return this.prisma.meter.findUnique({ where: { id } });
   }
 
-  public create(input: CreateMeterInput): Promise<Meter> {
+  public create(input: CreateMeterInput & { owner?: any }): Promise<Meter> {
     return this.prisma.meter.create({ data: input });
   }
 
-  public update(id: string, input: UpdateMeterInput): Promise<Meter> {
+  public update(id: string, input: UpdateMeterInput & { owner?: any }): Promise<Meter> {
     return this.prisma.meter.update({ where: { id }, data: input });
   }
 

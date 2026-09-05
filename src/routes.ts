@@ -65,6 +65,27 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ICustomerInfo": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string"},
+            "careOf": {"dataType":"string"},
+            "consumerNo": {"dataType":"string"},
+            "type": {"dataType":"string"},
+            "address": {"dataType":"string"},
+            "mobile": {"dataType":"string"},
+            "concernOffice": {"dataType":"string"},
+            "feederName": {"dataType":"string"},
+            "meterNo": {"dataType":"string"},
+            "meterType": {"dataType":"string"},
+            "meterStatus": {"dataType":"string"},
+            "loadKw": {"dataType":"double"},
+            "tariff": {"dataType":"string"},
+            "balance": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "MeterDto": {
         "dataType": "refObject",
         "properties": {
@@ -74,6 +95,7 @@ const models: TsoaRoute.Models = {
             "accountType": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"enum","enums":["Prepaid"]},{"dataType":"enum","enums":["Postpaid"]},{"dataType":"enum","enums":[null]}]},
             "provider": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"enum","enums":["NESCO"]},{"dataType":"enum","enums":["DESCO"]}]},
             "userId": {"dataType":"string"},
+            "owner": {"dataType":"union","subSchemas":[{"ref":"ICustomerInfo"},{"dataType":"any"}]},
             "createdAt": {"dataType":"datetime","required":true},
             "updatedAt": {"dataType":"datetime"},
         },
@@ -100,27 +122,6 @@ const models: TsoaRoute.Models = {
             "accountType": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["Prepaid"]},{"dataType":"enum","enums":["Postpaid"]}]},
             "provider": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["NESCO"]},{"dataType":"enum","enums":["DESCO"]}]},
             "userId": {"dataType":"string"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ICustomerInfo": {
-        "dataType": "refObject",
-        "properties": {
-            "name": {"dataType":"string"},
-            "careOf": {"dataType":"string"},
-            "consumerNo": {"dataType":"string"},
-            "type": {"dataType":"string"},
-            "address": {"dataType":"string"},
-            "mobile": {"dataType":"string"},
-            "concernOffice": {"dataType":"string"},
-            "feederName": {"dataType":"string"},
-            "meterNo": {"dataType":"string"},
-            "meterType": {"dataType":"string"},
-            "meterStatus": {"dataType":"string"},
-            "loadKw": {"dataType":"double"},
-            "tariff": {"dataType":"string"},
-            "balance": {"dataType":"double"},
         },
         "additionalProperties": false,
     },

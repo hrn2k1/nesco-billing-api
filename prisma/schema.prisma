@@ -28,6 +28,7 @@ model Meter {
   provider    String?  @default("NESCO")
   userId      String
   user        User     @relation(fields: [userId], references: [id])
+  owner       Json?
   createdAt   DateTime @default(now())
   updatedAt   DateTime? @updatedAt
 }

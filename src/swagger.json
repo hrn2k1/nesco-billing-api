@@ -125,6 +125,56 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ICustomerInfo": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"careOf": {
+						"type": "string"
+					},
+					"consumerNo": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"mobile": {
+						"type": "string"
+					},
+					"concernOffice": {
+						"type": "string"
+					},
+					"feederName": {
+						"type": "string"
+					},
+					"meterNo": {
+						"type": "string"
+					},
+					"meterType": {
+						"type": "string"
+					},
+					"meterStatus": {
+						"type": "string"
+					},
+					"loadKw": {
+						"type": "number",
+						"format": "double"
+					},
+					"tariff": {
+						"type": "string"
+					},
+					"balance": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"MeterDto": {
 				"properties": {
 					"id": {
@@ -167,6 +217,14 @@
 					},
 					"userId": {
 						"type": "string"
+					},
+					"owner": {
+						"anyOf": [
+							{
+								"$ref": "#/components/schemas/ICustomerInfo"
+							},
+							{}
+						]
 					},
 					"createdAt": {
 						"type": "string",
@@ -244,56 +302,6 @@
 					},
 					"userId": {
 						"type": "string"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ICustomerInfo": {
-				"properties": {
-					"name": {
-						"type": "string"
-					},
-					"careOf": {
-						"type": "string"
-					},
-					"consumerNo": {
-						"type": "string"
-					},
-					"type": {
-						"type": "string"
-					},
-					"address": {
-						"type": "string"
-					},
-					"mobile": {
-						"type": "string"
-					},
-					"concernOffice": {
-						"type": "string"
-					},
-					"feederName": {
-						"type": "string"
-					},
-					"meterNo": {
-						"type": "string"
-					},
-					"meterType": {
-						"type": "string"
-					},
-					"meterStatus": {
-						"type": "string"
-					},
-					"loadKw": {
-						"type": "number",
-						"format": "double"
-					},
-					"tariff": {
-						"type": "string"
-					},
-					"balance": {
-						"type": "number",
-						"format": "double"
 					}
 				},
 				"type": "object",

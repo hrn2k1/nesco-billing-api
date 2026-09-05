@@ -25,6 +25,7 @@ export class Mapper {
             accountType: meter.accountType ?? "Prepaid",
             provider: meter.provider ?? 'app',
             userId: meter.userId ?? undefined,
+            owner: meter.owner ?? undefined,
             createdAt: meter.createdAt,
             updatedAt: meter.updatedAt ?? undefined,
         };

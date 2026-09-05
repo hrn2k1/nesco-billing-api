@@ -119,6 +119,111 @@ export class CustomerService {
             ? null
             : date;
     }
+
+    public async getPostpaidCustomerInfo(customerAccount: string): Promise<ICustomerInfo | null> {
+        const webDomain = "https://customer.nesco.gov.bd/";
+        const webUrl = `${webDomain}post/bill`;
+        try {
+            const client = createSessionAwareClient();
+
+            const { html, response } = await fetchHtmlPage(client, webUrl, {
+                Referer: webDomain,
+                Origin: webDomain,
+            });
+
+            console.log("GET /post/bill status:", response.status);
+            console.log("GET /post/bill content-type:", response.headers?.["content-type"]);
+            console.log("GET /post/bill snippet:", html.slice(0, 400));
+
+            const $ = cheerio.load(html);
+            const csrfToken = $("input[name='_token']").val() || $("meta[name='csrf-token']").attr("content");
+
+            console.log("Token=", csrfToken);
+
+            const qs = new URLSearchParams();
+            qs.append("_token", String(csrfToken));
+            qs.append("cust_no", customerAccount.trim());
+            qs.append("submit", "All Bills");
+            const postResponse = await client.post(webUrl,
+                qs.toString(),
+                {
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRF-TOKEN": String(csrfToken),
+                        "X-Requested-With": "XMLHttpRequest",
+                        Referer: webDomain,
+                        Origin: webDomain
+                    }
+                }
+            );
+
+            assertSuccessfulResponse(postResponse, webUrl);
+
+            const resultHtml = postResponse.data;
+            const $2 = cheerio.load(resultHtml);
+
+            const customerInfo: ICustomerInfo | any = null;
+            $2("#con_info_div .card-body .form-group.row input[type='text']")
+                .each((index: number, input: any) => {
+                    switch (index) {
+                        case 0:
+                            customerInfo.name = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 1:
+                            customerInfo.careOf = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 2:
+                            customerInfo.address = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 3:
+                            customerInfo.mobile = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 4:
+                            customerInfo.concernOffice = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 5:
+                            customerInfo.feederName = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 6:
+                            customerInfo.consumerNo = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 9:
+                            customerInfo.meterNo = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 10:
+                            customerInfo.loadKw = Number($2(input).val()) || 0;
+                            break;
+                        case 11:
+                            customerInfo.tariff = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 12:
+                            customerInfo.meterType = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                    };
+                });
+
+            if (customerInfo) {
+                customerInfo.type = "postpaid";
+                customerInfo.meterStatus = "active";
+            }
+
+            return customerInfo;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                console.error("NESCO customer info request failed", {
+                    message: error.message,
+                    code: error.code,
+                    status: error.response?.status,
+                    responseData: error.response?.data
+                });
+            } else {
+                console.error("NESCO customer info processing failed", error);
+            }
+
+            throw error;
+        }
+    }
+
     public async getPostpaidCustomerBills(customerAccount: string): Promise<ICustomerBillResponse | null> {
         const webDomain = "https://customer.nesco.gov.bd/";
         const webUrl = `${webDomain}post/bill`;
@@ -241,6 +346,115 @@ export class CustomerService {
                 });
             } else {
                 console.error("NESCO customer bills processing failed", error);
+            }
+
+            throw error;
+        }
+    }
+
+    public async getPrepaidCustomerInfo(customerAccount: string): Promise<ICustomerInfo | null> {
+        const webDomain = "https://customer.nesco.gov.bd/";
+        const webUrl = `${webDomain}pre/panel`;
+        try {
+            const client = createSessionAwareClient();
+
+            const { html, response } = await fetchHtmlPage(client, webUrl, {
+                Referer: webDomain,
+                Origin: webDomain,
+            });
+
+            console.log("GET /pre/panel status:", response.status);
+            console.log("GET /pre/panel content-type:", response.headers?.["content-type"]);
+            console.log("GET /pre/panel snippet:", html.slice(0, 400));
+
+            const $ = cheerio.load(html);
+            const csrfToken = $("input[name='_token']").val() || $("meta[name='csrf-token']").attr("content");
+
+            console.log("Token:", csrfToken);
+
+            const qs = new URLSearchParams();
+            qs.append("_token", String(csrfToken));
+            qs.append("cust_no", customerAccount.trim());
+            qs.append("submit", "Recharge History");
+            const postResponse = await client.post(webUrl,
+                qs.toString(),
+                {
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRF-TOKEN": String(csrfToken),
+                        "X-Requested-With": "XMLHttpRequest",
+                        Referer: webDomain,
+                        Origin: webDomain
+                    }
+                }
+            );
+
+            assertSuccessfulResponse(postResponse, webUrl);
+
+            const resultHtml = postResponse.data;
+            const $2 = cheerio.load(resultHtml);
+
+            const customerInfo: ICustomerInfo | any = null;
+            $2("#con_info_div .card-body .form-group.row input[type='text']")
+                .each((index: number, input: any) => {
+                    switch (index) {
+                        case 0:
+                            customerInfo.name = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 1:
+                            customerInfo.careOf = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 2:
+                            customerInfo.address = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 3:
+                            customerInfo.mobile = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 4:
+                            customerInfo.concernOffice = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 5:
+                            customerInfo.feederName = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 6:
+                            customerInfo.consumerNo = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 7:
+                            customerInfo.meterNo = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 8:
+                            customerInfo.loadKw = Number($2(input).val()) || 0;
+                            break;
+                        case 9:
+                            customerInfo.tariff = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 10:
+                            customerInfo.meterType = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 11:
+                            customerInfo.meterStatus = $2(input).val()?.toString()?.trim() || "";
+                            break;
+                        case 14:
+                            customerInfo.balance = Number($2(input).val()) || 0;
+                            break;
+                    };
+                });
+            if (customerInfo) {
+                customerInfo.type = "prepaid";
+                customerInfo.meterStatus = "active";
+            }
+            return customerInfo;
+
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                console.error("NESCO customer info request failed", {
+                    message: error.message,
+                    code: error.code,
+                    status: error.response?.status,
+                    responseData: error.response?.data
+                });
+            } else {
+                console.error("NESCO customer info processing failed", error);
             }
 
             throw error;
